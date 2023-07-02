@@ -18,5 +18,5 @@ def get_latitude_longitude(address):
         return latitude, longitude
     else:
         return None
-def distance_km(location1, location2):
-    return distance.distance(location1, location2).kilometers if location1 and location2 else None
+def distance_m(location1, location2):
+    return distance.distance(location1, location2).meters if location1 and location2 else None
