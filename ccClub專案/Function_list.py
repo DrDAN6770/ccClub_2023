@@ -28,3 +28,27 @@ def RoutePlanning(p1, p2):
     encoded_p2 = requests.utils.quote(p2)
     url = f'https://www.google.com/maps/dir/{encoded_p1}/{encoded_p2}'
     return url
+
+# 返回電影院在google map上的連結
+def place_url(r):
+    # load .env
+    info = dotenv.dotenv_values('.env')
+    apikey = info.get('googleAPI')
+
+    # 定義參數
+    place_name = r['事業名稱']
+    lat_n_lng = eval(r['經緯度'])
+    lat = str(lat_n_lng[0])
+    lng = str(lat_n_lng[1])
+
+    # 取得地點資訊
+    url = f'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={place_name}&inputtype=textquery&fields=place_id&key={apikey}'
+    payload={}
+    headers = {}
+    response = requests.request("GET", url, headers=headers, data=payload)
+    # 從地點資訊中取得place_id
+    place_info = response.json()
+    place_id = place_info['candidates'][0]['place_id']
+
+    place_url = f'https://www.google.com/maps/search/?api=1&query={lat},{lng}&query_place_id={place_id}'
+    return place_url
